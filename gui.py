@@ -1,5 +1,5 @@
 from PyQt5.QtCore import QSize, Qt, pyqtSignal
-from PyQt5 import QtGui
+from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import (
     QApplication,
     QGridLayout,
@@ -29,26 +29,31 @@ class CentralWidget(QWidget):
         )
         self.widget.setGeometry(r)
 
+
 class chess_label(QLabel):
-    rub = pyqtSignal([])
+    
     def __init__(self, colour, position):
         super().__init__()
         self.piece = None
         self.position = position
-
+        self.setAlignment(Qt.AlignCenter)
 
         if colour:
-            self.setStyleSheet("border: 0.1em solid black; background: gray;")
+            self.setStyleSheet("border: 0.1em solid black; background: #481f1b;")
         else:
-            self.setStyleSheet("border: 0.1em solid black;")
+            self.setStyleSheet("border: 0.1em solid black; background: #cfac86;")
 
-    def setPixmap(self,image):
-        super.setPixmap(image)
+    def set_piece_pic(self,image):
+        h = self.height()
+        w = self.width()
+        image = image.scaledToHeight(self.height()/6, Qt.SmoothTransformation)
+        self.setPixmap(image)
         self.piece = image
+
 
     def mousePressEvent(self, event):
         send_away = [self.position, self.piece]
-        self.rub.emit(send_away)
+       
         if self.piece:
             
             self.setStyleSheet("border: 0.1em solid black; background: green;")
@@ -63,7 +68,7 @@ class MainWindow(QMainWindow):
         container = QWidget()
         central_widget = CentralWidget(container)
         self.setCentralWidget(central_widget)
-        
+        self.setMinimumSize(800,800)
         grid_places = []
         lay = QGridLayout(container)
         lay.setSpacing(0)
@@ -77,7 +82,6 @@ class MainWindow(QMainWindow):
 
             for x in range(8):
                 place = chess_label(colour, [y,x])
-                place.rub.connect(lambda: self.hey(a))
                 colour = not colour
                 row.append(place)
                 lay.addWidget(place,y,x)
@@ -85,10 +89,33 @@ class MainWindow(QMainWindow):
             chess_grid.append(row)
             colour = not colour
 
-    def hey(self, n):
-        print("hey")
-        print(n)
+        for x in range (len(chess_grid[0])):
+            chess_grid[6][x].set_piece_pic(QPixmap("Pieces/blackpawn.png"))
+        
+        for x in range(len(chess_grid[0])):
+            chess_grid[1][x].set_piece_pic(QPixmap("Pieces/whitepawn.png"))
 
+        chess_grid[0][0].set_piece_pic(QPixmap("Pieces/whiterook.png"))
+        chess_grid[0][7].set_piece_pic(QPixmap("Pieces/whiterook.png"))
+
+        chess_grid[7][0].set_piece_pic(QPixmap("Pieces/blackrook.png"))
+        chess_grid[7][7].set_piece_pic(QPixmap("Pieces/blackrook.png"))
+
+        chess_grid[0][1].set_piece_pic(QPixmap("Pieces/whiteknightl.png"))
+        chess_grid[0][6].set_piece_pic(QPixmap("Pieces/whiteknightr.png"))
+        chess_grid[7][1].set_piece_pic(QPixmap("Pieces/blackknightl.png"))
+        chess_grid[7][6].set_piece_pic(QPixmap("Pieces/blackknightr.png"))
+        
+        chess_grid[0][2].set_piece_pic(QPixmap("Pieces/whitebishopl.png"))
+        chess_grid[0][5].set_piece_pic(QPixmap("Pieces/whitebishopr.png"))
+        chess_grid[7][2].set_piece_pic(QPixmap("Pieces/blackbishopl.png"))
+        chess_grid[7][5].set_piece_pic(QPixmap("Pieces/blackbishopr.png"))
+        
+        chess_grid[0][3].set_piece_pic(QPixmap("Pieces/whitequeen.png"))
+        chess_grid[7][4].set_piece_pic(QPixmap("Pieces/blackqueen.png"))
+
+        chess_grid[0][4].set_piece_pic(QPixmap("Pieces/whiteking.png"))
+        chess_grid[7][3].set_piece_pic(QPixmap("Pieces/blackking.png"))
 
 
 def main():
