@@ -7,7 +7,7 @@ from typing import List
 class Rook(Piece):
 
 	def __init__(self, position, colour, image):
-		super().__init__(position, colour, image)
+		super(Rook, self).__init__(position, colour, image)
 		
 	def move(self):
 		pass

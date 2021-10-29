@@ -37,25 +37,22 @@ class chess_label(QLabel):
         self.piece = None
         self.position = position
         self.setAlignment(Qt.AlignCenter)
-
+        
         if colour:
             self.setStyleSheet("border: 0.1em solid black; background: #481f1b;")
         else:
             self.setStyleSheet("border: 0.1em solid black; background: #cfac86;")
 
-    def set_piece_pic(self,image):
-        h = self.height()
-        w = self.width()
-        image = image.scaledToHeight(self.height()/5.5, Qt.SmoothTransformation)
+    def set_piece(self,piece_object):
+
+        image = ((piece_object).getImage()).scaledToHeight(self.height()/5.5, Qt.SmoothTransformation)
         self.setPixmap(image)
         self.piece = image
 
-
     def mousePressEvent(self, event):
-        send_away = [self.position, self.piece]
-       
+        
         if self.piece:
-            
+            (self.piece).move()
             self.setStyleSheet("border: 0.1em solid black; background: green;")
         else:
             
@@ -73,7 +70,7 @@ class MainWindow(QMainWindow):
         lay.setSpacing(0)
         lay.setContentsMargins(0, 0, 0, 0)
         colour = False
-        chess_grid = []
+        self.chess_grid = []
 
 
         for y in range(8):
@@ -85,34 +82,16 @@ class MainWindow(QMainWindow):
                 row.append(place)
                 lay.addWidget(place,y,x)
 
-            chess_grid.append(row)
+            self.chess_grid.append(row)
             colour = not colour
 
-        #Making the Pawns
-        for x in range (len(chess_grid[0])):
-                    
-            chess_grid[1][x].set_piece_pic(QPixmap("Pieces/whitepawn.png"))
-            chess_grid[6][x].set_piece_pic(QPixmap("Pieces/blackpawn.png"))
-           
-        chess_grid[0][0].set_piece_pic(QPixmap("Pieces/whiterook.png"))
-        chess_grid[0][7].set_piece_pic(QPixmap("Pieces/whiterook.png"))
+    def initialise_board(self, pieces):
 
-        chess_grid[7][0].set_piece_pic(QPixmap("Pieces/blackrook.png"))
-        chess_grid[7][7].set_piece_pic(QPixmap("Pieces/blackrook.png"))
+        for item in pieces:
+            self.chess_grid[item.getX()][item.getY()].set_piece(item)
 
-        chess_grid[0][1].set_piece_pic(QPixmap("Pieces/whiteknightl.png"))
-        chess_grid[0][6].set_piece_pic(QPixmap("Pieces/whiteknightr.png"))
-        chess_grid[7][1].set_piece_pic(QPixmap("Pieces/blackknightl.png"))
-        chess_grid[7][6].set_piece_pic(QPixmap("Pieces/blackknightr.png"))
-        
-        chess_grid[0][2].set_piece_pic(QPixmap("Pieces/whitebishopl.png"))
-        chess_grid[0][5].set_piece_pic(QPixmap("Pieces/whitebishopr.png"))
-        chess_grid[7][2].set_piece_pic(QPixmap("Pieces/blackbishopl.png"))
-        chess_grid[7][5].set_piece_pic(QPixmap("Pieces/blackbishopr.png"))
-        
-        chess_grid[0][3].set_piece_pic(QPixmap("Pieces/whitequeen.png"))
-        chess_grid[7][4].set_piece_pic(QPixmap("Pieces/blackqueen.png"))
+    def set_chess_grid(self, chess_grid):
+        self.chess_grid = chess_grid
 
-        chess_grid[0][4].set_piece_pic(QPixmap("Pieces/whiteking.png"))
-        chess_grid[7][3].set_piece_pic(QPixmap("Pieces/blackking.png"))
-
+    def get_chess_grid(self):
+        return self.chess_grid

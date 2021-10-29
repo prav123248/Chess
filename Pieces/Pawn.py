@@ -5,7 +5,7 @@ from typing import List
 
 class Pawn(Piece):
 	def __init__(self, position, colour, image):
-		super().__init__(position, colour, image)
+		super(Pawn, self).__init__(position, colour, image)
 		
 
 	def promotion(self):

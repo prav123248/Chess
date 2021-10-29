@@ -5,7 +5,7 @@ from typing import List
 
 class Queen(Piece):
 	def __init__(self, position, colour, image):
-		super().__init__(position, colour, image)
+		super(Queen, self).__init__(position, colour, image)
 		
 	def move(self):
 		pass

@@ -24,6 +24,15 @@ class Piece(object):
 	def setPosition(self, aPosition) -> None:
 		self.position = aPosition
 
+	def getX(self):
+		return (self.position[0])
+
+	def getY(self):
+		return (self.position[1])
+	
+	def getImage(self):
+		return self.image
+
 	@classmethod
 	def getCaptured(self):
 		return self.captured
