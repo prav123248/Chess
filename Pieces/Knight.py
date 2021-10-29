@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
-import Piece
+from Pieces import Piece
 from typing import List
 
 class Knight(Piece):

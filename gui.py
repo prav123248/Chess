@@ -1,14 +1,14 @@
-from PyQt5.QtCore import QSize, Qt, pyqtSignal
+from PyQt5.QtCore import QSize, Qt
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import (
     QApplication,
     QGridLayout,
     QLabel,
     QMainWindow,
-    QSizePolicy,
     QStyle,
     QWidget,
 )
+import Pieces
 
 
 class CentralWidget(QWidget):
@@ -69,7 +69,6 @@ class MainWindow(QMainWindow):
         central_widget = CentralWidget(container)
         self.setCentralWidget(central_widget)
         self.setMinimumSize(800,800)
-        grid_places = []
         lay = QGridLayout(container)
         lay.setSpacing(0)
         lay.setContentsMargins(0, 0, 0, 0)
@@ -89,12 +88,12 @@ class MainWindow(QMainWindow):
             chess_grid.append(row)
             colour = not colour
 
+        #Making the Pawns
         for x in range (len(chess_grid[0])):
-            chess_grid[6][x].set_piece_pic(QPixmap("Pieces/blackpawn.png"))
-        
-        for x in range(len(chess_grid[0])):
+                    
             chess_grid[1][x].set_piece_pic(QPixmap("Pieces/whitepawn.png"))
-
+            chess_grid[6][x].set_piece_pic(QPixmap("Pieces/blackpawn.png"))
+           
         chess_grid[0][0].set_piece_pic(QPixmap("Pieces/whiterook.png"))
         chess_grid[0][7].set_piece_pic(QPixmap("Pieces/whiterook.png"))
 
@@ -117,19 +116,3 @@ class MainWindow(QMainWindow):
         chess_grid[0][4].set_piece_pic(QPixmap("Pieces/whiteking.png"))
         chess_grid[7][3].set_piece_pic(QPixmap("Pieces/blackking.png"))
 
-
-def main():
-    app = QApplication([])
-    app.setStyle("fusion")
-    view = MainWindow()
-    view.resize(860, 860)
-    view.show()
-    app.exec_()
-
-
-
-
-
-
-if __name__ == "__main__":
-    main()
