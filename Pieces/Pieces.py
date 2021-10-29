@@ -2,11 +2,10 @@
 # -*- coding: UTF-8 -*-
 from abc import ABCMeta, abstractmethod
 from typing import List
-
+from PyQt5.QtCore import Qt
 class Piece(object):
 	id_count = 0
-	__metaclass__ = ABCMeta
-	@classmethod
+
 	def __init__(self, position, colour, image):
 		self.pieceID = Piece.id_count
 		Piece.id_count += 1
@@ -14,13 +13,13 @@ class Piece(object):
 		self.captured = False
 		self.pin = False
 		self.colour = colour
-		self.image = image
+		self.image = image.scaledToHeight(480/5.5, Qt.SmoothTransformation)
 
-	@classmethod
+
 	def getPosition(self):
 		return self.position
 
-	@classmethod
+
 	def setPosition(self, aPosition) -> None:
 		self.position = aPosition
 
@@ -33,27 +32,27 @@ class Piece(object):
 	def getImage(self):
 		return self.image
 
-	@classmethod
+
 	def getCaptured(self):
 		return self.captured
 
-	@classmethod
+
 	def setCaptured(self, aCaptured) -> None:
 		self.captured = aCaptured
 
-	@classmethod
+
 	def getPin(self):
 		return self.pin
 
-	@classmethod
+
 	def setPin(self, aPin) -> None:
 		self.pin = aPin
 
-	@classmethod
+
 	def getColour(self):
 		return self.colour
 
-	@classmethod
+
 	def setColour(self, aColour) -> None:
 		self.colour = aColour
 

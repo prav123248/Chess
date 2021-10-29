@@ -32,6 +32,11 @@ class CentralWidget(QWidget):
 
 class chess_label(QLabel):
     
+    chess_grid = None
+    moving_piece = None
+    selected_label = None
+    valid_moves = []
+
     def __init__(self, colour, position):
         super().__init__()
         self.piece = None
@@ -44,19 +49,37 @@ class chess_label(QLabel):
             self.setStyleSheet("border: 0.1em solid black; background: #cfac86;")
 
     def set_piece(self,piece_object):
-
-        image = ((piece_object).getImage()).scaledToHeight(self.height()/5.5, Qt.SmoothTransformation)
-        self.setPixmap(image)
-        self.piece = image
+        self.setPixmap(piece_object.getImage())
+        self.piece = piece_object
 
     def mousePressEvent(self, event):
         
-        if self.piece:
-            (self.piece).move()
-            self.setStyleSheet("border: 0.1em solid black; background: green;")
-        else:
+        if self.piece and chess_label.moving_piece == None:
+            chess_label.moving_piece = self.piece
+            chess_label.selected_label = self
+            chess_label.valid_moves = (self.piece).move()
+            for move in chess_label.valid_moves:
+                chess_label.chess_grid[move[0]][move[1]].colour_request("green")
             
+        elif self.position in chess_label.valid_moves:
+            self.travel_here(chess_label.moving_piece)
             self.setStyleSheet("border: 0.1em solid black; background: red;")
+    def colour_request(self, colour):
+        if colour == "green":
+            self.setStyleSheet("border: 0.1em solid black; background: green;")
+
+    def travel_here(self, piece):
+        (chess_label.selected_label).removePiece()
+        chess_label.selected_label = None
+        self.set_piece(piece)
+        chess_label.moving_piece = None
+        chess_label.valid_moves = []
+        return
+
+    def removePiece(self):
+        self.piece = None
+        self.clear()
+
 
 
 class MainWindow(QMainWindow):
@@ -84,11 +107,13 @@ class MainWindow(QMainWindow):
 
             self.chess_grid.append(row)
             colour = not colour
-
+            chess_label.chess_grid = self.chess_grid
     def initialise_board(self, pieces):
 
         for item in pieces:
             self.chess_grid[item.getX()][item.getY()].set_piece(item)
+
+
 
     def set_chess_grid(self, chess_grid):
         self.chess_grid = chess_grid

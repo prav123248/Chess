@@ -12,3 +12,4 @@ class Rook(Piece):
 	def move(self):
 		pass
 
+

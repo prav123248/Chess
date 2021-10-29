@@ -12,5 +12,6 @@ class Pawn(Piece):
 		pass
 
 	def move(self):
-		pass
+		
+		return [[2,4],[4,7],[3,6]]
 

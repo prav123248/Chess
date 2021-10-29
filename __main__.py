@@ -12,7 +12,7 @@ class Chess():
         view = MainWindow()
         view.resize(860, 860)
         self.chess_pieces = self.piece_initialisation()
-        print(len(self.chess_pieces))
+        
         view.initialise_board(self.chess_pieces)
         view.show()
         app.exec_()
@@ -52,7 +52,7 @@ class Chess():
         #Queen Objects
         pieces_collection.append(King([0,4], False, QPixmap("Pieces/whiteking.png")))
         pieces_collection.append(King([7,3],True, QPixmap("Pieces/blackking.png")))
- 
+        
         return pieces_collection
 
     def get_chess_objects(self):
