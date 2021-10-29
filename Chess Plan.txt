@@ -1,0 +1,67 @@
+Chess Game :
+
+
+Game fundamentals:
+Piece Selection (Done) (Almost Coded)
+Moving (Done) (Almost Coded)
+Capturing pieces (Done)
+Check & Checkmate
+Pawn promotion, En Passant
+Dealing with Illegal moves : Pinned to King Pieces. (Done)
+Stage movement static method.
+	
+ 
+Grid
+
+Pieces (Objects) :
+King
+Rook
+Bishop
+Queen
+Knight
+Pawn
+
+Done :
+
+Grid :
+Simulated by X,Y Coordinates. All piece positions will be stored as attributes.
+Actual GUI Grid will need square regions assigned for each X,Y coordinate of the Grid. For the back-end.
+
+
+
+Not Done : 
+
+Moving:
+Checks whether Pin is set to False, if so, calculates valid places the piece can move:
+	Again, done by stages depending on each piece. Each stage returns an array with the possible moves. Stage static method will control legality (not moving over pieces, past allies, past enemies etc) 
+	Possible places listed in the array are highlighted on the Grid and currently selected piece is stored.
+	If a possible place is clicked, piece will change its location to that position. If an enemy piece is on that position, the objects remove method is called first and then piece replaces it.
+
+Remove:
+Given object is removed as an object from the Game. Removed from all Arrays where it is present.
+
+Check and Checkmate:
+Each round checks to make sure current players King's check attribute is set to False. If check is set to true, King will become the only selectable piece, rest will have selectable attribute set to false. When King is selected, his moving command will be designed so the stage method will return all the possible moves. From there, the enemy array will be cycled through and each of their potential moves are compared to see if any of the King's moves need to be removed. The allies moves are also simulated in the stage system to see if they can either block or capture the object checking the King. If neither is possible, checkmate is declared. Any other options are highlighted.
+
+
+Illegal Move Protection and Checking Check(Pinned to King Pieces):
+(Activated at the end of every move. After White moves, pass White Rook/Bishop/Queen Pieces and all Pieces and vice versa)
+All pieces Pin Attribute is set to False.
+
+For all pieces :
+	Their moves are separated into stages (Rook would have Horiz1, Horiz2, Verti1, Verti2).
+	Each stage checks till it reaches the end of board or an ally piece is detected or two enemy pieces have been detected where one is not the King.
+		Negative Potential 1 (King detected First) :
+			Check on the relevant King set to True. Consequences dealt with after this process is finished.
+			If another piece is also checking the King, double check is set to True.
+		Negative Potential 2 (King is detected Second, only possible during Rooks, Bishops and Queens Stages :
+			First Enemy Piece Detected Pin attribute is set to True.
+	Once all stages have been checked, move onto the next piece.
+
+
+If Pin attribute is set to True, that piece cannot be selected this round.
+	
+
+
+
+

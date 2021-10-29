@@ -46,7 +46,7 @@ class chess_label(QLabel):
     def set_piece_pic(self,image):
         h = self.height()
         w = self.width()
-        image = image.scaledToHeight(self.height()/6, Qt.SmoothTransformation)
+        image = image.scaledToHeight(self.height()/5.5, Qt.SmoothTransformation)
         self.setPixmap(image)
         self.piece = image
 
