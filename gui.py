@@ -57,7 +57,7 @@ class chess_label(QLabel):
         if self.piece and chess_label.moving_piece == None:
             chess_label.moving_piece = self.piece
             chess_label.selected_label = self
-            chess_label.valid_moves = (self.piece).move()
+            chess_label.valid_moves = (self.piece).move(chess_label.chess_grid)
             for move in chess_label.valid_moves:
                 chess_label.chess_grid[move[0]][move[1]].colour_request("green")
             

@@ -61,6 +61,9 @@ For all pieces :
 
 If Pin attribute is set to True, that piece cannot be selected this round.
 	
+Extra feature :
+To switch sides, create a button that swaps the pixmaps between pieces depending on their type. They will still internally be treated the same way, it just appears differently to the user.
+The colour variable is used to determine whether a side has reached the end of the board or not. The computer will always think that white is at the top.
 
 
 
