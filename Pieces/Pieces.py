@@ -87,7 +87,7 @@ class Piece(object):
 					else:
 						break
 			
-			if vertical == None:
+			if vertical:
 				#checks bottommost valid vertical position
 				for x in range(position[1], 0, -1):
 					if grid[position[0]][x]: # check legality here
@@ -117,7 +117,7 @@ class Piece(object):
 		if blackdiag:
 			valid_moves.extend(self.diagb_inf())
 		"""
-
+		
 		return valid_moves
 			
 		

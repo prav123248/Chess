@@ -33,6 +33,7 @@ class CentralWidget(QWidget):
 class chess_label(QLabel):
     
     chess_grid = None
+    top_colour = False   #Default top of the board is white (so false) but included this for help in possible future colour switch addition
     moving_piece = None
     selected_label = None
     valid_moves = []
@@ -41,29 +42,37 @@ class chess_label(QLabel):
         super().__init__()
         self.piece = None
         self.position = position
+        self.colour = colour
         self.setAlignment(Qt.AlignCenter)
         
-        if colour:
-            self.setStyleSheet("border: 0.1em solid black; background: #481f1b;")
-        else:
-            self.setStyleSheet("border: 0.1em solid black; background: #cfac86;")
+        self.reset_colour()
 
     def set_piece(self,piece_object):
         self.setPixmap(piece_object.getImage())
         self.piece = piece_object
 
-    def mousePressEvent(self, event):
+    def reset_colour(self):
+
+        if self.colour:
+            self.setStyleSheet("border: 0.1em solid black; background: #481f1b;")
+        else:
+            self.setStyleSheet("border: 0.1em solid black; background: #cfac86;")
         
+    def mousePressEvent(self, event):
         if self.piece and chess_label.moving_piece == None:
             chess_label.moving_piece = self.piece
             chess_label.selected_label = self
-            chess_label.valid_moves = (self.piece).move(chess_label.chess_grid)
+            chess_label.valid_moves = (self.piece).move(chess_label.chess_grid, chess_label.top_colour)
             for move in chess_label.valid_moves:
                 chess_label.chess_grid[move[0]][move[1]].colour_request("green")
             
         elif self.position in chess_label.valid_moves:
             self.travel_here(chess_label.moving_piece)
             self.setStyleSheet("border: 0.1em solid black; background: red;")
+            for move in chess_label.valid_moves:
+                chess_label.chess_grid[move[0]][move[1]].reset_colour()
+            chess_label.valid_moves = []
+
     def colour_request(self, colour):
         if colour == "green":
             self.setStyleSheet("border: 0.1em solid black; background: green;")
@@ -73,7 +82,6 @@ class chess_label(QLabel):
         chess_label.selected_label = None
         self.set_piece(piece)
         chess_label.moving_piece = None
-        chess_label.valid_moves = []
         return
 
     def removePiece(self):
@@ -103,7 +111,7 @@ class MainWindow(QMainWindow):
                 place = chess_label(colour, [y,x])
                 colour = not colour
                 row.append(place)
-                lay.addWidget(place,y,x)
+                lay.addWidget(place,x,y)
 
             self.chess_grid.append(row)
             colour = not colour
