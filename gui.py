@@ -64,11 +64,21 @@ class chess_label(QLabel):
             chess_label.selected_label = self
             chess_label.valid_moves = (self.piece).move(chess_label.chess_grid, chess_label.top_colour)
             for move in chess_label.valid_moves:
-                chess_label.chess_grid[move[0]][move[1]].colour_request("green")
+
+                #Only valid moves returned so piece must be opponent piece, impossible for same team
+                if chess_label.chess_grid[move[0]][move[1]].piece:
+                    chess_label.chess_grid[move[0]][move[1]].colour_request("red")
+                else:
+                    chess_label.chess_grid[move[0]][move[1]].colour_request("green")
             
         elif self.position in chess_label.valid_moves:
             self.travel_here(chess_label.moving_piece)
-            self.setStyleSheet("border: 0.1em solid black; background: red;")
+            for move in chess_label.valid_moves:
+                chess_label.chess_grid[move[0]][move[1]].reset_colour()
+            chess_label.valid_moves = []
+
+        elif self.position not in chess_label.valid_moves:
+            chess_label.moving_piece = None
             for move in chess_label.valid_moves:
                 chess_label.chess_grid[move[0]][move[1]].reset_colour()
             chess_label.valid_moves = []
@@ -76,11 +86,14 @@ class chess_label(QLabel):
     def colour_request(self, colour):
         if colour == "green":
             self.setStyleSheet("border: 0.1em solid black; background: green;")
+        elif colour == "red":
+            self.setStyleSheet("border: 0.1em solid black; background: red;")
 
     def travel_here(self, piece):
         (chess_label.selected_label).removePiece()
         chess_label.selected_label = None
         self.set_piece(piece)
+        piece.move_update(self.position)
         chess_label.moving_piece = None
         return
 
