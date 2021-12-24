@@ -69,39 +69,49 @@ class Piece(object):
 			#valid[3] represents rightmost vertical valid position
 
 			#set valid position default to current position
-			valid = [position[0], position[0], position[0], position[0]]
-
+			valid = [position[0], position[0], position[1], position[1]]
 
 			if horizontal:
 				#checks leftmost valid horizontal position
 				for x in range(position[0]-1, -1, -1):
-					if grid[x][position[1]]:
+					if grid[x][position[1]] and grid[x][position[1]].piece == None:
 						valid[0] = x
+					elif grid[x][position[1]] and grid[x][position[1]].piece.colour != self.colour:
+						valid[0] = x
+						break
 					else:
 						break
 				
 				#checks rightmost valid horizotnal position
 				for x in range(position[0] + 1, 8):
-					if grid[x][position[1]]: #check legality here
+					if grid[x][position[1]] and grid[x][position[1]].piece == None:
 						valid[1] = x
+					elif grid[x][position[1]] and grid[x][position[1]].piece.colour != self.colour:
+						valid[1] = x
+						break
 					else:
 						break
 			
 			if vertical:
 				#checks bottommost valid vertical position
-				for x in range(position[1], 0, -1):
-					if grid[position[0]][x]: # check legality here
+				for x in range(position[1]-1, -1, -1):
+					if grid[position[0]][x] and grid[position[0]][x].piece == None:
 						valid[2] = x
+					elif grid[position[0]][x] and grid[position[0]][x].piece.colour != self.colour:
+						valid[2] = x
+						break
 					else:
 						break
 
-				for x in range(position[1] + 1, 6):
-					if grid[position[0]][x]: # check legality here
+				for x in range(position[1]+1, 8):
+					if grid[position[0]][x] and grid[position[0]][x].piece == None:
 						valid[3] = x
+					elif grid[position[0]][x] and grid[position[0]][x].piece.colour != self.colour:
+						valid[3] = x
+						break
 					else:
 						break
-				
-			print(valid)
+
 			return valid
 
 		valid_moves = []
@@ -117,7 +127,7 @@ class Piece(object):
 		if blackdiag:
 			valid_moves.extend(self.diagb_inf())
 		"""
-		
+		#print(valid_moves)
 		return valid_moves
 			
 		
