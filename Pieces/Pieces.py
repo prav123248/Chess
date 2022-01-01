@@ -5,6 +5,10 @@ from typing import List
 from PyQt5.QtCore import Qt
 class Piece(object):
 	id_count = 0
+	all_pieces = []
+	black_pieces = []
+	white_pieces = []
+	check_mate = "White"
 
 	def __init__(self, position, colour, image):
 		self.pieceID = Piece.id_count
@@ -57,10 +61,10 @@ class Piece(object):
 		self.colour = aColour
 
 	@abstractmethod
-	def move(self, grid, top):
+	def move(self, grid, check_mode=False):
 		pass
 
-	def infinite_move(self, grid, horizontal, vertical, diag):
+	def infinite_move(self, grid, horizontal, vertical, diag, check_mode = False):
 
 		def consecutive_spaces(grid, position):
 			#valid[0] represents leftmost horizontal valid position
@@ -180,12 +184,57 @@ class Piece(object):
 		valid_moves = []
 		if horizontal or vertical or diag:
 			valid_moves.extend(consecutive_spaces(grid, self.position))
-	
+
+		
+		if check_mode:
+			initially_valid = valid_moves
+			valid_moves = []
+			for move in initially_valid:
+				if Piece.check_legality(grid, move, self):
+					valid_moves.append(move)
+
 		return valid_moves
 
 	def move_update(self, position):
 		self.position = position
 		return
-			
+
+	#Checks if a piece is pinned against their own king so can't move
+	def legality(self, grid):
+				
+		if self.colour == True:
+			king = Piece.black_pieces[len(Piece.black_pieces)-1]
+		else:
+			king = Piece.white_pieces[len(Piece.white_pieces)-1]
 		
-		
+		grid[self.position[0]][self.position[1]].piece = None
+
+		if king.check(grid):
+			grid[self.position[0]][self.position[1]].piece = self
+			return False
+		else:
+			grid[self.position[0]][self.position[1]].piece = self
+			return True
+	
+	#Check if a move can be made during King's check
+	def check_legality(grid, position, piece):
+
+		if piece.colour == True:
+			enemies = Piece.white_pieces
+			king = Piece.black_pieces[len(Piece.black_pieces)-1]
+		else:
+			enemies = Piece.black_pieces
+			king = Piece.white_pieces[len(Piece.white_pieces)-1]
+
+		grid[piece.position[0]][piece.position[1]].piece = None
+		temp = grid[position[0]][position[1]]
+		grid[position[0]][position[1]].piece = piece
+
+		if king.check():
+			grid[position[0]][position[1]].piece = temp
+			grid[piece.position[0]][piece.position[1]].piece = piece
+			return False
+		else:
+			grid[position[0]][position[1]].piece = temp
+			grid[piece.position[0]][piece.position[1]].piece = piece
+			return True

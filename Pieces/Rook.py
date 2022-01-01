@@ -9,7 +9,7 @@ class Rook(Piece):
 	def __init__(self, position, colour, image):
 		super(Rook, self).__init__(position, colour, image)
 		
-	def move(self, grid, top):
+	def move(self, grid):
 		return self.infinite_move(grid, True, True, False)
 		
 	def move_update(self, position):

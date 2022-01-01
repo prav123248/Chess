@@ -7,6 +7,6 @@ class Queen(Piece):
 	def __init__(self, position, colour, image):
 		super(Queen, self).__init__(position, colour, image)
 		
-	def move(self, grid, top):
+	def move(self, grid):
 		return self.infinite_move(grid, True, True, True)
 

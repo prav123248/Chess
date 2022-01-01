@@ -9,6 +9,8 @@ from PyQt5.QtWidgets import (
     QWidget,
 )
 import Pieces
+from Pieces.King import King
+from Pieces.Pieces import Piece
 
 
 class CentralWidget(QWidget):
@@ -37,6 +39,8 @@ class chess_label(QLabel):
     moving_piece = None
     selected_label = None
     valid_moves = []
+    current_turn = False
+    check_mode = False
 
     def __init__(self, colour, position):
         super().__init__()
@@ -59,10 +63,27 @@ class chess_label(QLabel):
             self.setStyleSheet("border: 0.1em solid black; background: #cfac86;")
         
     def mousePressEvent(self, event):
+        
         if self.piece and chess_label.moving_piece == None:
             chess_label.moving_piece = self.piece
             chess_label.selected_label = self
-            chess_label.valid_moves = (self.piece).move(chess_label.chess_grid, chess_label.top_colour)
+            #chess_label.valid_moves = (self.piece).move(chess_label.chess_grid, chess_label.top_colour)
+            if chess_label.check_mode == False and King.check_state(chess_label.chess_grid, chess_label.current_turn):
+                chess_label.check_mode = True
+                if Piece.check_mate != None:
+                    chess_label.current_turn = None
+                    if Piece.check_mate == "Stalemate":
+                        print("Stalemate")
+                    else:
+                        print(f"{Piece.check_mate} WINS")
+                chess_label.valid_moves = (self.piece).move(chess_label.chess_grid, True)
+            elif chess_label.check_mode == True:
+                chess_label.valid_moves = (self.piece).move(chess_label.chess_grid, True)
+            elif self.piece.legality(chess_label.chess_grid) and chess_label.current_turn == self.piece.colour:
+                chess_label.valid_moves = (self.piece).move(chess_label.chess_grid)
+            else:
+                chess_label.valid_moves = []
+
             for move in chess_label.valid_moves:
 
                 #Only valid moves returned so piece must be opponent piece, impossible for same team
@@ -95,6 +116,10 @@ class chess_label(QLabel):
         self.set_piece(piece)
         piece.move_update(self.position)
         chess_label.moving_piece = None
+        if chess_label.current_turn == False:
+            chess_label.current_turn = True
+        else:
+            chess_label.current_turn = False
         return
 
     def removePiece(self):

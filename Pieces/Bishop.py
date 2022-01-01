@@ -10,7 +10,7 @@ class Bishop(Piece):
 		super(Bishop, self).__init__(position, colour, image)
 
 
-	def move(self, grid, top):
+	def move(self, grid):
 		return self.infinite_move(grid, False, False, True)
 
 	def move_update(self, position):

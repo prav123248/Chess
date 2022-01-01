@@ -19,13 +19,14 @@ class Chess():
 
 
 
+
     def piece_initialisation(self):
         pieces_collection = []
 
         #White/Black Pawn Objects
         for x in range ((8)):
-            pieces_collection.append(Pawn([x,6], True,QPixmap("Pieces/blackpawn.png")))
-            pieces_collection.append(Pawn([x,1], False,QPixmap("Pieces/whitepawn.png")))
+            pieces_collection.append(Pawn([x,6], True,QPixmap("Pieces/blackpawn.png"), False))
+            pieces_collection.append(Pawn([x,1], False,QPixmap("Pieces/whitepawn.png"), False))
 
         #Rook Objects
         pieces_collection.append(Rook([0,0],False,QPixmap("Pieces/whiterook.png")))
@@ -53,6 +54,15 @@ class Chess():
         pieces_collection.append(King([4,0], False, QPixmap("Pieces/whiteking.png")))
         pieces_collection.append(King([3,7],True, QPixmap("Pieces/blackking.png")))
         
+        for piece in pieces_collection:
+            if piece.colour == True:
+                Piece.black_pieces.append(piece)
+            else:
+                Piece.white_pieces.append(piece)
+        
+        Piece.all_pieces = pieces_collection
+
+
         return pieces_collection
 
     def get_chess_objects(self):
